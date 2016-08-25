@@ -13,5 +13,10 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "foundation-sites": "^6.2.3",
+    "underscore.string": "^3.3.4",
+    "underscore": "^1.8.3"
+  }
 }

@@ -19,7 +19,10 @@ gulp.task('lint', function() {
 
 gulp.task('sass', function() {
   return gulp.src('src/sass/*.scss')
-    .pipe(sass())
+    .pipe(sass({
+      includePaths: ['bower_components/foundation-sites/scss']
+    }))
+    .pipe(minifyCSS({keepBreaks:true}))
     .pipe(gulp.dest('dist/css'))
     .pipe(server.notify());
 });
@@ -41,10 +44,13 @@ gulp.task('html', function() {
 });
 
 gulp.task('bower', function() {
-  var jsFilter = filter('*.js', {restore: true});
-  var cssFilter = filter('*.css', {restore: true});
-  var fontFilter = filter(['*.eot', '*.woff', '*.svg', '*.ttf'], {restore: true});
-  var imageFilter = filter(['*.gif', '*.png', '*.svg', '*.jpg', '*.jpeg'], {restore: true})
+  var jsFilter = filter('**/*.js', {restore: true});
+  var cssFilter = filter('**/*.css', {restore: true});
+  var sassFilter = filter('**/*.scss', {restore: true});
+  var fontFilter = filter(['**/*.eot', '**/*.woff', '**/*.svg', '**/*.ttf'], {restore: true});
+  var imageFilter = filter(['**/*.gif', '**/*.png', '**/*.svg', '**/*.jpg', '**/*.jpeg'], {restore: true});
+
+  console.log(mainBowerFiles())
 
   return gulp.src(mainBowerFiles())
     // JS
@@ -73,6 +79,7 @@ gulp.task('bower', function() {
     .pipe(flatten())
     .pipe(gulp.dest('/dist/images/lib'))
     .pipe(imageFilter.restore)
+    .pipe(server.notify());
 });
 
 gulp.task('server', function() {
